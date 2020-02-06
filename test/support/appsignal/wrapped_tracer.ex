@@ -2,6 +2,8 @@ defmodule Appsignal.WrappedTracer do
   use Wrapper
   alias Appsignal.Tracer
 
+  defdelegate current_span(pid), to: Tracer
+
   def create_span(name, parent, pid) do
     add(:create_span, {name, parent, pid})
     Tracer.create_span(name, parent, pid)
