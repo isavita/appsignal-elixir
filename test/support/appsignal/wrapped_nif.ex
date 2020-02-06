@@ -29,7 +29,7 @@ defmodule Appsignal.WrappedNif do
   end
 
   def get(key) do
-    Agent.get(__MODULE__, &Map.fetch!(&1, key))
+    Agent.get(__MODULE__, &Map.fetch(&1, key))
   end
 
   defp add(key, value) do
