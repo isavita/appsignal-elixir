@@ -2,11 +2,12 @@ defmodule Appsignal.Error.BackendTest do
   use ExUnit.Case, async: true
   import AppsignalTest.Utils
   import ExUnit.CaptureIO
-  alias Appsignal.{Error.Backend, Span, WrappedNif, WrappedTracer}
+  alias Appsignal.{Error.Backend, Span, WrappedNif, WrappedTracer, WrappedSpan}
 
   setup do
     WrappedNif.start_link()
     WrappedTracer.start_link()
+    WrappedSpan.start_link()
     :ok
   end
 
@@ -22,6 +23,15 @@ defmodule Appsignal.Error.BackendTest do
     test "creates a span", %{pid: pid} do
       until(fn ->
         assert {:ok, [{"", nil, ^pid}]} = WrappedTracer.get(:create_span)
+      end)
+    end
+
+    test "adds an error to the created span", %{pid: pid} do
+      until(fn ->
+        assert {:ok, [{%Span{}, %RuntimeError{message: "Exception"}, stack}]} =
+                 WrappedSpan.get(:add_error)
+
+        assert is_list(stack)
       end)
     end
 
