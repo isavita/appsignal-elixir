@@ -18,9 +18,9 @@ defmodule Appsignal.WrappedTracer do
     Tracer.create_span(name, parent, pid)
   end
 
-  def close_span(span, pid) do
-    add(:close_span, {span, pid})
-    Tracer.close_span(span, pid)
+  def close_span(span) do
+    add(:close_span, {span})
+    Tracer.close_span(span)
   end
 
   def get(key) do
