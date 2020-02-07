@@ -4,13 +4,6 @@ defmodule Appsignal.WrappedTracer do
 
   defdelegate current_span(pid), to: Tracer
 
-  def create_span(name, parent, pid) do
-    add(:create_span, {name, parent, pid})
-    Tracer.create_span(name, parent, pid)
-  end
-
-  def close_span(span) do
-    add(:close_span, {span})
-    Tracer.close_span(span)
-  end
+  defwrap(Tracer, create_span(name, parent, pid))
+  defwrap(Tracer, close_span(span))
 end

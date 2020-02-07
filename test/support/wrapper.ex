@@ -31,4 +31,17 @@ defmodule Wrapper do
       end
     end
   end
+
+  defmacro defwrap(module, fun) do
+    fun = Macro.escape(fun, unquote: true)
+
+    quote bind_quoted: [module: module, fun: fun] do
+      {name, args} = Macro.decompose_call(fun)
+
+      def unquote(name)(unquote_splicing(args)) do
+        add(unquote(name), {unquote_splicing(args)})
+        unquote(module).unquote(name)(unquote_splicing(args))
+      end
+    end
+  end
 end

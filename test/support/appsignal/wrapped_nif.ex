@@ -2,18 +2,7 @@ defmodule Appsignal.WrappedNif do
   use Wrapper
   alias Appsignal.Nif
 
-  def create_root_span(name) do
-    add(:create_root_span, {name})
-    Nif.create_root_span(name)
-  end
-
-  def create_child_span(trace_id, span_id, name) do
-    add(:create_child_span, {trace_id, span_id, name})
-    Nif.create_child_span(trace_id, span_id, name)
-  end
-
-  def close_span(reference) do
-    add(:close_span, {reference})
-    Nif.close_span(reference)
-  end
+  defwrap(Nif, create_root_span(name))
+  defwrap(Nif, create_child_span(trace_id, span_id, name))
+  defwrap(Nif, close_span(reference))
 end
