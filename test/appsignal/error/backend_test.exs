@@ -70,7 +70,7 @@ defmodule Appsignal.Error.BackendTest do
 
     test "closes the existing span", %{span: span, pid: pid} do
       until(fn ->
-        assert {:ok, [{^span, ^pid}]} = WrappedTracer.get(:close_span)
+        assert {:ok, [{^span}]} = WrappedTracer.get(:close_span)
       end)
     end
   end
